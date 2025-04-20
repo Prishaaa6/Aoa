@@ -1,0 +1,39 @@
+import sys
+def dijkstra(graph, start):
+    num_vertices = len(graph)
+    visited = [False] * num_vertices
+    distance = [sys.maxsize] * num_vertices
+    distance[start] = 0
+
+    for _ in range(num_vertices):
+        min_dist = sys.maxsize
+        min_index = -1
+        for v in range(num_vertices):
+            if not visited[v] and distance[v] < min_dist:
+                min_dist = distance[v]
+                min_index = v
+
+        u = min_index
+        visited[u] = True
+
+        for v in range(num_vertices):
+            if graph[u][v] > 0 and not visited[v]:
+                if distance[u] + graph[u][v] < distance[v]:
+                    distance[v] = distance[u] + graph[u][v]
+
+    return distance
+
+n = int(input("Enter number of vertices: "))
+graph = []
+
+print("Enter adjacency matrix row-wise (use 0 for no edge):")
+for _ in range(n):
+    row = list(map(int, input().split()))
+    graph.append(row)
+
+source = int(input("Enter source vertex (0-indexed): "))
+distances = dijkstra(graph, source)
+
+print(f"Shortest distances from vertex {source}:")
+for i, d in enumerate(distances):
+    print(f"Vertex {i} : {d}")
