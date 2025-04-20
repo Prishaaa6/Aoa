@@ -1,0 +1,42 @@
+def is_safe(vertex, graph, colors, c):
+    for i in range(len(graph)):
+        if graph[vertex][i] == 1 and colors[i] == c:
+            return False
+    return True
+
+def graph_coloring_util(graph, m, colors, vertex):
+    if vertex == len(graph):
+        return True
+
+    for c in range(1, m + 1):
+        if is_safe(vertex, graph, colors, c):
+            colors[vertex] = c
+            if graph_coloring_util(graph, m, colors, vertex + 1):
+                return True
+            colors[vertex] = 0  
+    return False
+
+def graph_coloring(graph, m):
+    n = len(graph)
+    colors = [0] * n
+
+    if not graph_coloring_util(graph, m, colors, 0):
+        print("Solution does not exist.")
+    else:
+        print("Vertex colors:", colors)
+
+n = int(input("Enter number of vertices: "))
+e = int(input("Enter number of edges: "))
+
+graph = [[0] * n for _ in range(n)]
+
+print("Enter each edge as two space-separated vertex indices (0-based):")
+for _ in range(e):
+    u, v = map(int, input().split())
+    graph[u][v] = 1
+    graph[v][u] = 1 
+
+m = int(input("Enter number of colors: "))
+
+graph_coloring(graph, m)
+
